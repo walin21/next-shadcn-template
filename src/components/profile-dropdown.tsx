@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import useDialogState from "@/hooks/use-dialog-state";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,14 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignOutDialog } from "@/components/sign-out-dialog";
+import { useSession } from "next-auth/react";
 import { AuthUser } from "@/types/user.type";
 
-type ProfileDropdownProps = {
-  user: AuthUser;
-};
-
-export function ProfileDropdown({ user }: ProfileDropdownProps) {
+export function ProfileDropdown() {
   const [open, setOpen] = useDialogState();
+  const { data: session } = useSession();
+  const user = session?.user as AuthUser;
 
   return (
     <>
@@ -28,16 +29,19 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarFallback>{user.name[0].toUpperCase() + user.lastName[0].toUpperCase()}</AvatarFallback>
+              <AvatarImage src="/avatars/01.png" alt={`${user?.name}'s avatar`} />
+              <AvatarFallback>
+                {`${user?.name?.[0] || ""}${user?.lastName?.[0] || ""}`.toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col gap-1.5">
-              <p className="text-sm leading-none font-medium">{user.name}</p>
+              <p className="text-sm leading-none font-medium">{user?.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                {user.email}
+                {user?.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -45,7 +49,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
               <Link href="/settings">
-                Profile
+                Perfil
                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>

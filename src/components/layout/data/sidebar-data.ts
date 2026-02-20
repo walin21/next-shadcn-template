@@ -26,11 +26,6 @@ import { ClerkLogo } from "@/assets/clerk-logo";
 import { type SidebarData } from "../types";
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: "satnaing",
-    email: "satnaingdev@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
       name: "Shadcn Admin",
@@ -161,14 +156,14 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: "Other",
+      title: "Otros",
       items: [
         {
-          title: "Settings",
+          title: "Ajustes",
           icon: Settings,
           items: [
             {
-              title: "Profile",
+              title: "Perfil",
               url: "/settings",
               icon: UserCog,
             },
