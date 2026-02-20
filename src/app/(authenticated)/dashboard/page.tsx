@@ -8,9 +8,12 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { ConfigDrawer } from "@/components/config-drawer";
 import { ProfileDropdown } from "@/components/profile-dropdown";
 import { Separator } from "@/components/ui/separator";
+import { AuthUser } from "@/types/user.type";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
+  const { auth } = useAuthStore();
 
   useEffect(() => {
     fetch();
@@ -36,7 +39,7 @@ export default function DashboardPage() {
         <div className="ms-auto flex items-center space-x-4">
           <ThemeSwitch />
           <ConfigDrawer />
-          <ProfileDropdown />
+          <ProfileDropdown user={auth.user as AuthUser} />
         </div>
       </Header>
       <Main fixed>

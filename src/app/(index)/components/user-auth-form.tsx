@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2, LogIn } from "lucide-react";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth-store";
 import { sleep, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/password-input";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
   email: z.email({
@@ -44,7 +44,6 @@ export function UserAuthForm({
 }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useRouter();
-  const { auth } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,33 +53,27 @@ export function UserAuthForm({
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
+    const result = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
     toast.promise(sleep(2000), {
       loading: "Iniciando sesión...",
       success: () => {
         setIsLoading(false);
-
-        // Mock successful authentication with expiry computed at success time
-        const mockUser = {
-          accountNo: "ACC001",
-          email: data.email,
-          role: ["user"],
-          exp: Date.now() + 24 * 60 * 60 * 1000, // 24 hours from now
-        };
-
-        // Set user and access token
-        auth.setUser(mockUser);
-        auth.setAccessToken("mock-access-token");
-
-        // Redirect to the stored location or default to dashboard
+        console.log("Sign-in result:", result);
+        if (result?.error) {
+          return "Credenciales inválidas.";
+        }
         const targetPath = redirectTo || "/";
         navigate.push(targetPath);
-
         return `¡Bienvenido de nuevo, ${data.email}!`;
       },
-      error: "Error al iniciar sesión",
+      error: "Credenciales inválidas.",
     });
   }
 
@@ -98,7 +91,7 @@ export function UserAuthForm({
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input placeholder="name@example.com" {...field} />
+                <Input placeholder="nombre@ejemplo.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

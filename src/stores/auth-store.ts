@@ -1,51 +1,29 @@
 import { create } from "zustand";
 import { getCookie, setCookie, removeCookie } from "@/lib/cookies";
+import { AuthState } from "@/types/user.type";
 
-const ACCESS_TOKEN = "thisisjustarandomstring";
-
-interface AuthUser {
-  accountNo: string;
-  email: string;
-  role: string[];
-  exp: number;
-}
-
-interface AuthState {
-  auth: {
-    user: AuthUser | null;
-    setUser: (user: AuthUser | null) => void;
-    accessToken: string;
-    setAccessToken: (accessToken: string) => void;
-    resetAccessToken: () => void;
-    reset: () => void;
-  };
-}
+const USER_INFO = "_auth_user";
 
 export const useAuthStore = create<AuthState>()((set) => {
-  const cookieState = getCookie(ACCESS_TOKEN);
-  const initToken = cookieState ? JSON.parse(cookieState) : "";
+  const cookieUser = getCookie(USER_INFO);
+  const initUser = cookieUser ? JSON.parse(cookieUser) : "";
   return {
     auth: {
-      user: null,
+      user: initUser,
       setUser: (user) =>
-        set((state) => ({ ...state, auth: { ...state.auth, user } })),
-      accessToken: initToken,
-      setAccessToken: (accessToken) =>
         set((state) => {
-          setCookie(ACCESS_TOKEN, JSON.stringify(accessToken));
-          return { ...state, auth: { ...state.auth, accessToken } };
-        }),
-      resetAccessToken: () =>
-        set((state) => {
-          removeCookie(ACCESS_TOKEN);
-          return { ...state, auth: { ...state.auth, accessToken: "" } };
+          setCookie(USER_INFO, JSON.stringify(user));
+          return { ...state, auth: { ...state.auth, user } };
         }),
       reset: () =>
         set((state) => {
-          removeCookie(ACCESS_TOKEN);
+          removeCookie(USER_INFO);
           return {
             ...state,
-            auth: { ...state.auth, user: null, accessToken: "" },
+            auth: { 
+              ...state.auth,
+              user: null,
+            },
           };
         }),
     },

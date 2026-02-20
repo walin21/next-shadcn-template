@@ -55,9 +55,9 @@ export function ConfigDrawer() {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="pb-0 text-start">
-          <SheetTitle>Theme Settings</SheetTitle>
+          <SheetTitle>Configurar Apariencia y Diseño</SheetTitle>
           <SheetDescription id="config-drawer-description">
-            Adjust the appearance and layout to suit your preferences.
+            Ajusta la apariencia y el diseño según tus preferencias.
           </SheetDescription>
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">
@@ -70,9 +70,9 @@ export function ConfigDrawer() {
           <Button
             variant="destructive"
             onClick={handleReset}
-            aria-label="Reset all settings to default values"
+            aria-label="Restablecer todos los ajustes a los valores predeterminados"
           >
-            Reset
+            Restablecer
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -173,7 +173,7 @@ function ThemeConfig() {
   return (
     <div>
       <SectionTitle
-        title="Theme"
+        title="Apariencia"
         showReset={theme !== defaultTheme}
         onReset={() => setTheme(defaultTheme)}
       />
@@ -187,17 +187,17 @@ function ThemeConfig() {
         {[
           {
             value: "system",
-            label: "System",
+            label: "Sistema",
             icon: IconThemeSystem,
           },
           {
             value: "light",
-            label: "Light",
+            label: "Claro",
             icon: IconThemeLight,
           },
           {
             value: "dark",
-            label: "Dark",
+            label: "Oscuro",
             icon: IconThemeDark,
           },
         ].map((item) => (
@@ -205,7 +205,7 @@ function ThemeConfig() {
         ))}
       </Radio>
       <div id="theme-description" className="sr-only">
-        Choose between system preference, light mode, or dark mode
+        Elige entre la preferencia del sistema, modo claro u oscuro
       </div>
     </div>
   );
@@ -248,7 +248,7 @@ function SidebarConfig() {
         ))}
       </Radio>
       <div id="sidebar-description" className="sr-only">
-        Choose between inset, floating, or standard sidebar layout
+        Elige entre el diseño de barra lateral inset, flotante o estándar
       </div>
     </div>
   );
@@ -305,7 +305,7 @@ function LayoutConfig() {
         ))}
       </Radio>
       <div id="layout-description" className="sr-only">
-        Choose between default expanded, compact icon-only, or full layout mode
+        Elige entre el diseño predeterminado, compacto o de pantalla completa
       </div>
     </div>
   );
@@ -347,7 +347,7 @@ function DirConfig() {
         ))}
       </Radio>
       <div id="direction-description" className="sr-only">
-        Choose between left-to-right or right-to-left site direction
+        Elige entre la dirección de sitio de izquierda a derecha o de derecha a izquierda
       </div>
     </div>
   );

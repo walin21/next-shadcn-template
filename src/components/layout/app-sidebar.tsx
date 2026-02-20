@@ -14,10 +14,13 @@ import { sidebarData } from "@/components/layout/data/sidebar-data";
 import { NavGroup } from "@/components/layout/nav-group";
 import { NavUser } from "@/components/layout/nav-user";
 import { TeamSwitcher } from "@/components/layout/team-switcher";
+import { AuthUser } from "@/types/user.type";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function AppSidebar() {
   const { collapsible, variant } = useLayout();
   const [mounted, setMounted] = useState(false);
+  const { auth } = useAuthStore();
 
   useEffect(() => {
     setMounted(true);
@@ -42,7 +45,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        <NavUser user={auth.user as AuthUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

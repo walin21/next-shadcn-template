@@ -7,13 +7,29 @@ import { SearchProvider } from "@/components/context/search-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { SkipToMain } from "@/components/skip-to-main";
+import { useAuthStore } from "@/stores/auth-store";
+import { AuthUser } from "@/types/user.type";
 
 type AuthenticatedLayoutProps = {
   children?: React.ReactNode;
+  session?: AuthUser;
 };
 
-export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+export function AuthenticatedLayout({
+  children,
+  session,
+}: AuthenticatedLayoutProps) {
   const defaultOpen = getCookie("sidebar_state") !== "false";
+  const setUser = useAuthStore((state) => state.auth.setUser);
+  if (session) {
+    setUser({
+      name: session.name,
+      lastName: session.lastName,
+      email: session.email,
+      phone: session.phone,
+    });
+  }
+
   return (
     <SearchProvider>
       <LayoutProvider>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth-store";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { signOut } from "next-auth/react";
 
 interface SignOutDialogProps {
   open: boolean;
@@ -10,23 +10,24 @@ interface SignOutDialogProps {
 }
 
 export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
-  const navigate = useRouter();
   const { auth } = useAuthStore();
 
   const handleSignOut = () => {
     auth.reset();
     // Preserve current location for redirect after sign-in
-    const currentPath = location.href;
-    navigate.replace(`/sign-in?redirect=${encodeURIComponent(currentPath)}`);
+    const currentPath = location.pathname;
+    signOut({
+      callbackUrl: `/?redirect=${encodeURIComponent(currentPath)}`,
+    });
   };
 
   return (
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Sign out"
-      desc="Are you sure you want to sign out? You will need to sign in again to access your account."
-      confirmText="Sign out"
+      title="Cerrar sesión"
+      desc="¿Estás seguro de que deseas cerrar sesión? Necesitarás iniciar sesión nuevamente para acceder a tu cuenta."
+      confirmText="Cerrar sesión"
       destructive
       handleConfirm={handleSignOut}
       className="sm:max-w-sm"
